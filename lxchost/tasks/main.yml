@@ -1,0 +1,61 @@
+---
+# Prepares host to run LXC containers
+# Install using:
+# ansible-playbook -i localhost, lxchost-playbook.yml --ask-sudo-pass
+
+- name: install lxc
+  apt: name=lxc state=present
+  sudo: yes
+
+- name: list subuids
+  shell: "cat /etc/subuid || :"
+  register: subuid_contents
+  changed_when: False
+
+- name: add subuids
+  command: "usermod --add-subuids 100000-165536 {{ansible_ssh_user}}"
+  sudo: yes
+  when: subuid_contents.stdout.find('{{ansible_ssh_user}}') == -1
+
+- name: list subgids
+  shell: "cat /etc/subgid || :"
+  register: subgid_contents
+  changed_when: False
+
+- name: add subgids
+  command: "usermod --add-subgids 100000-165536 {{ansible_ssh_user}}"
+  sudo: yes
+  when: subgid_contents.stdout.find('{{ansible_ssh_user}}') == -1
+
+- name: check homedir permission
+  command: "stat -c %A {{ansible_env.HOME}}"
+  register: home_permissions
+  changed_when: False
+
+- name: make homedir executable
+  command: "chmod +x {{ansible_env.HOME}}"
+  when: home_permissions.stdout.count("x") != 3
+
+- name: check .local permission
+  command: "stat -c %A {{ansible_env.HOME}}/.local"
+  register: dot_local_permissions
+  changed_when: False
+
+- name: make .local executable
+  command: "chmod +x {{ansible_env.HOME}}/.local"
+  when: dot_local_permissions.stdout.count("x") != 3
+
+- name: create user lxc config directory
+  file: path="{{ansible_env.HOME}}/.config/lxc" state=directory
+
+- name: create default.conf
+  template: >
+    dest="{{ansible_env.HOME}}/.config/lxc/default.conf"
+    src=default.conf.j2
+
+- name: enable bridge network adapter creation access
+  lineinfile: >
+    dest=/etc/lxc/lxc-usernet
+    line="{{ansible_ssh_user}} veth lxcbr0 10"
+    state=present
+  sudo: yes
