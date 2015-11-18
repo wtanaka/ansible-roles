@@ -1,0 +1,42 @@
+---
+- name: apt-get update
+  apt: update_cache=yes cache_valid_time=3600
+  sudo: yes
+
+- name: install apache
+  apt: name=apache2
+  sudo: yes
+
+- name: enable mod_rewrite
+  sudo: yes
+  command: a2enmod rewrite
+  register: command_result
+  changed_when: "'already enabled' not in command_result.stdout"
+  notify:
+    - restart apache
+
+- name: install mod_php
+  apt: name=libapache2-mod-php5
+  sudo: yes
+
+- name: install php5-mysql
+  apt: name=php5-mysql
+  sudo: yes
+
+- name: virtualhost
+  sudo: yes
+  template: >
+    src=virtualhost.conf.j2
+    dest=/etc/apache2/sites-available/{{ site_name }}.conf
+
+- name: enable virtualhost
+  sudo: yes
+  command: a2ensite {{ site_name }}.conf
+  register: command_result
+  changed_when: "'already enabled' not in command_result.stdout"
+  notify:
+    - restart apache
+
+- name: ensure apache is running (and enable it at boot)
+  sudo: yes
+  service: name=apache2 state=started enabled=yes

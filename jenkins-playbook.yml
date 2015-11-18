@@ -1,0 +1,5 @@
+---
+# ansible-playbook -K -i "localhost," jenkins-playbook.yml
+- hosts: all
+  roles:
+    - jenkins

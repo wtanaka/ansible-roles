@@ -1,0 +1,14 @@
+<VirtualHost *:80>
+  DocumentRoot {{ deploy_to }}
+  ServerName {{ site_dns }}
+  ServerAlias *.{{ site_dns }}
+  ServerAlias {{ site_name }}
+  ServerAlias *.{{ site_name }}
+</VirtualHost>
+
+<Directory "{{ deploy_to }}">
+  Options All
+  AllowOverride All
+  # Needed for newer apache versions
+  Require all granted
+</Directory>

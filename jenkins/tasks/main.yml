@@ -1,0 +1,20 @@
+---
+- name: apt-key
+  sudo: yes
+  apt_key: >
+    state=present
+    url=http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key
+
+- name: sources.list
+  sudo: yes
+  apt_repository: >
+    repo='deb http://pkg.jenkins-ci.org/debian binary/'
+    state=present
+
+- name: apt-get update
+  apt: update_cache=yes cache_valid_time=3600
+  sudo: yes
+
+- name: install jenkins
+  apt: name=jenkins
+  sudo: yes
