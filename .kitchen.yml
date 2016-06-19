@@ -1,0 +1,38 @@
+driver:
+  name: docker
+  use_sudo: <% if ENV['TRAVIS'] then true else false end %>
+
+platforms:
+  - name: ubuntu-trusty-docker
+    driver_config:
+      use_cache: true
+      image: wtanaka/trusty32
+
+provisioner:
+  name: ansible_push
+  idempotency_test: true
+  support_older_version: true
+  playbook: kitchen-playbook.yml
+
+suites:
+  - name: ubuntu_universe
+    provisioner:
+      extra_vars:
+        role_under_test: "ubuntu_universe"
+    verifier:
+      command: rspec -c -f d test/integration/ubuntu_universe
+
+  - name: xz
+    provisioner:
+      extra_vars:
+        role_under_test: "xz"
+
+  - name: lz4
+    provisioner:
+      extra_vars:
+        role_under_test: "lz4"
+
+verifier:
+# TODO
+#  name: serverspec
+  name: shell
