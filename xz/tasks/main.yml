@@ -1,0 +1,4 @@
+---
+- name: install xz
+  apt: name=xz-utils state=present
+  sudo: True
