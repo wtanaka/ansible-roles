@@ -35,4 +35,5 @@ suites:
 verifier:
 # TODO
 #  name: serverspec
+#  additional_install_command: mkdir -p /tmp/kitchen
   name: shell
