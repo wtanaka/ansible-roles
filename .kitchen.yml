@@ -42,6 +42,11 @@ suites:
       extra_vars:
         role_under_test: "gdebi"
 
+  - name: python-pycurl
+    provisioner:
+      extra_vars:
+        role_under_test: "python-pycurl"
+
   - name: zsh
     provisioner:
       extra_vars:
