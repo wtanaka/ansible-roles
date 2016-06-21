@@ -22,6 +22,11 @@ suites:
     verifier:
       command: rspec -c -f d test/integration/ubuntu_universe
 
+  - name: dropbox
+    provisioner:
+      extra_vars:
+        role_under_test: "dropbox"
+
   - name: xz
     provisioner:
       extra_vars:

@@ -1,0 +1,20 @@
+---
+- name: apt-get update
+  apt: update_cache=true cache_valid_time=3600
+  sudo: yes
+
+- name: Check if dropbox is installed
+  command: dpkg-query -W dropbox
+  register: check_dropbox
+  failed_when: false
+  changed_when: false
+
+- name: Download Ubuntu dropbox package
+  get_url: url={{dropbox_url_ubuntu_deb}} dest={{dropbox_tmp_deb}}
+  when: check_dropbox.rc == 1
+
+- name: Install Ubuntu dropbox package
+  sudo: true
+  command: gdebi {{dropbox_tmp_deb}}
+  when: check_dropbox.rc == 1
+  failed_when: false
