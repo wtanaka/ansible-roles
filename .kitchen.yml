@@ -32,6 +32,11 @@ suites:
       extra_vars:
         role_under_test: "lz4"
 
+  - name: gdebi
+    provisioner:
+      extra_vars:
+        role_under_test: "gdebi"
+
 verifier:
 # TODO
 #  name: serverspec
