@@ -37,6 +37,11 @@ suites:
       extra_vars:
         role_under_test: "gdebi"
 
+  - name: zsh
+    provisioner:
+      extra_vars:
+        role_under_test: "zsh"
+
 verifier:
 # TODO
 #  name: serverspec
