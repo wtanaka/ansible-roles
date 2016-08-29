@@ -1,4 +1,0 @@
----
-- name: install lz4
-  apt: name=liblz4-tool state=present
-  sudo: True
