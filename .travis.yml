@@ -1,21 +1,19 @@
 language: ruby
 rvm:
-  - 2.2
-  - 2.1
-  - 2.0
-  - 1.9.3
-
+- 2.2
+- 2.1
+- 2.0
+- 1.9.3
 sudo: required
-
 services:
-  - docker
-
+- docker
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y ansible
-
+- sudo apt-get update -qq
+- sudo apt-get install -y ansible
 script:
-  - bundle exec kitchen test --concurrency=10 all
-
+- bundle exec kitchen test --concurrency=10 all
 after_failure:
-  - cat .kitchen/logs/*.log | grep -v '^I, '
+- cat .kitchen/logs/*.log | grep -v '^I, '
+notifications:
+  slack:
+    secure: lsipCNkoK2t6+SddaXzPxcg7IQ4l8vwfYnRIm8ls9RKORbGgmfOXOxd7RcpdpC9/HH7/sztdZ/bNJ4KiFVcufKMp3sfW8TQutX7JUpoeFAfA1+c5x1T153uK1t9ZiZ5IzryKuM0+vkUVmLt+3rnI+KLJsg4NbMCXCJD/8drnpSiN8g1nEwGCTVNBn/vQY3NcN91uGIE4BGKsCA5DfgsOq9ikVtUgHCDpPs//JHQiYl8RzwtB4VnIv/rDC+B9/XcS1xo4u8ReMmlWqJwne/V/MEWp86edaiJ1uEM2cfXYfE7seSdtmRP6pEXpoQlpcewUYMUA2t+Crealp3p4Eo0+OEcJS+wAmrzD9F0JDVTmEC4W0m0Kat996ZUjoNdx+5sWvDH+mjKlm6nZIdjKls7sUALJDpgkMkk8TmjTU6bSx1UHDH6rsurS9E06cVpwpKm88z1AKNoJJhuZIo/jkPJwUTPvux6WFyEHtsjObNa5bhg6vEAq3vE913kleziTXHF1IdYkiWyiNl3XxBGglHm2J8o2LokzaAlGAZqgmkwleLV35PfdvYKDcQxD0fwO0W9xgkeSrZLpmXZN9Psp/xWzZ+fBoO2cnuZuI8bkzE2a0zll6ofqPXWQGH04GsHie4jVHK6cA4hu494TU1hslhqp+n4oO2JHTjZ0V423yHhJlR8=
